@@ -1,0 +1,29 @@
+service: email-sender
+
+frameworkVersion: '3'
+
+package:
+  individually: true
+  include:
+    - ./src/files/*
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs14.x
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+            - "ses:SendRawEmail"
+          Resource: "*"
+
+functions:
+  mail-handler:
+    handler: src/functions/index.handler
